@@ -96,16 +96,16 @@ def optimize_servers(servers, targetServerSize)
     nil
   end
 
-  result = Array.new((count[targetServerSize] - 1), 0)
+  optimized_servers = Array.new((count[targetServerSize] - 1), 0)
   k = targetServerSize;
 
   while k > 0 do
-    result[count[k] - 2] = servers[from[k]];
+    optimized_servers[count[k] - 2] = servers[from[k]];
     k = k - servers[from[k]];
   end
 
   optimized_servers_hash = Hash.new(0)
-  result.each{|key| optimized_servers_hash[key] += 1}
+  optimized_servers.each{|key| optimized_servers_hash[key] += 1}
 
   puts optimized_servers_hash
 end
