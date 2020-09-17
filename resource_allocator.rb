@@ -1,13 +1,3 @@
-def user_request
-  hours = 15
-  cpus = 115
-  price = 95
-  final_output = get_costs(hours, cpus, price)
-  print final_output
-end
-
-private
-
 def get_costs(hours, cpus, price)
   region = {
     'us-east': {
@@ -126,6 +116,10 @@ def get_total_cost(optimized_servers, region_cost)
   # TO DO
 end
 
-
-
-
+def user_request
+  hours = 15
+  cpus = 115
+  price = 95
+  final_output = get_costs(hours, cpus, price)
+  print final_output
+end
