@@ -17,55 +17,53 @@ module MinimumCpu
       server_array
     end
 
-    # This method takes optimized servers and returns their total cost
-    # Calculation based on the region, cost per hour and no of hours.
-    # cost - An Array of region specific cost values
-    # server - Optimized servers values
-    # hours - total no of hours expected to run
-    def self.get_region_cost(server, cost, hours)
-      server_cost = 0
-      server.each do|key, value|
-        if cost[key].present?
-          server_cost = server_cost + (cost[key] * value * hours)
-        end
-      end
-      server_cost
-    end
-
 
     east_keys = get_server_type($region[:'us-east'].stringify_keys.keys)
     west_keys = get_server_type($region[:'us-west'].stringify_keys.keys)
     asia_keys = get_server_type($region[:'asia'].stringify_keys.keys)
 
-    east_server = OptimizeCPU.optimize_servers(east_keys, cpus, $server_value)
-    west_server = OptimizeCPU.optimize_servers(west_keys, cpus, $server_value)
-    asia_server = OptimizeCPU.optimize_servers(asia_keys, cpus, $server_value)
+    # call_flag is to identify from which module the optimize_servers method is called.
+    # 0 - MinimumCpu
+    call_flag = 0
+    east_server = OptimizeCPU.optimize_servers(east_keys, cpus, $server_value, call_flag)
+    west_server = OptimizeCPU.optimize_servers(west_keys, cpus, $server_value, call_flag)
+    asia_server = OptimizeCPU.optimize_servers(asia_keys, cpus, $server_value, call_flag)
 
 
-    east_cost = get_region_cost(east_server, $region[:'us-east'].stringify_keys, hours)
-    west_cost = get_region_cost(west_server, $region[:'us-west'].stringify_keys, hours)
-    asia_cost = get_region_cost(asia_server, $region[:'asia'].stringify_keys, hours)
+
+    east_cost = OptimizeCPU.get_region_cost(east_server, $region[:'us-east'].stringify_keys, hours)
+    west_cost = OptimizeCPU.get_region_cost(west_server, $region[:'us-west'].stringify_keys, hours)
+    asia_cost = OptimizeCPU.get_region_cost(asia_server, $region[:'asia'].stringify_keys, hours)
 
     total_cost = east_cost + west_cost + asia_cost
 
-    final_response = [
-      {
+    east_hash = {}
+    west_hash = {}
+    asia_hash = {}
+    if east_cost.present?
+      east_hash = {
         "region": "us-east",
         "total_cost": "$" + east_cost.round(2).to_s,
         "servers": east_server
-      },
-      {
+      }
+    end
+    if west_cost.present?
+      west_hash = {
         "region": "us-west",
         "total_cost": "$" + west_cost.round(2).to_s,
         "servers": west_server
-      },
-      {
+      }
+    end
+    if asia_hash.present?
+      asia_hash = {
         "region": "asia",
         "total_cost": "$" + asia_cost.round(2).to_s,
         "servers": asia_server
       }
-    ]
+    end
 
-    final_response.to_json
+    minimum_cpu_output = [ west_hash, east_hash, asia_hash]
+    minimum_cpu_output = minimum_cpu_output.delete_if &:empty?
+    minimum_cpu_output
   end
 end
