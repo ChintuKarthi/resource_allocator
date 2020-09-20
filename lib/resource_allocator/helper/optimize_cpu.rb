@@ -44,7 +44,7 @@ module OptimizeCPU
     if call_flag == 0
       result.each{|key| optimized_servers_hash[compare_value[key]] += 1}
     elsif call_flag == 1
-      result.each{|key| optimized_servers_hash[compare_value[(key/1000)]] += 1}
+      result.each{|key| optimized_servers_hash[compare_value[((key.to_f)/10000)]] += 1}
     end
     optimized_servers_hash
   end
