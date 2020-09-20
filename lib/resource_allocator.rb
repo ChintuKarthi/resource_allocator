@@ -50,13 +50,13 @@ module ResourceAllocator
     # CPU values large - 1, xlarge - 2, 2xlarge - 4, 4xlarge - 8, 8xlarge - 16, 10xlarge - 32
     # if we have 115 cpu for 24 hrs, we need to get 115 exact number.
     if(hours)
-      if(cpus && price)
-        puts 'Not Implemented Yet!'
-      elsif(cpus)
+      if(!(cpus.zero? || cpus.nil?) && !(price.zero? || price.nil?))
+        puts 'Price, Hours and Cpus are not Implemented Yet!'
+      elsif(!(cpus.zero?) && !(price.zero? && price.nil?))
         output_response = MinimumCpu.get_cpu_hours_cost($server_value, $region, hours, cpus)
         puts output_response
-      elsif(price)
-        puts 'Not Implemented Yet!'
+      elsif(price && !(cpus.zero? && cpus.nil?))
+        puts 'Price and Hours are not Implemented Yet!'
       end
     end
   end
