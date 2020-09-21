@@ -55,12 +55,17 @@ module OptimizeCPU
   # server - Optimized servers values
   # hours - total no of hours expected to run
   def self.get_region_cost(server, cost, hours)
-    server_cost = 0
-    server.each do|key, value|
-      if cost[key].present?
-        server_cost = server_cost + (cost[key] * value * hours)
+    if server.present?
+      server_cost = 0
+      server.each do|key, value|
+        if cost[key].present?
+          server_cost = server_cost + (cost[key] * value * hours)
+        end
       end
+      server_cost
+    else
+      return nil
     end
-    server_cost
+
   end
 end
