@@ -58,7 +58,7 @@ module ResourceAllocator
         output_response = MinCpuMaxPrice.get_min_cpu_max_price($server_value, $region, hours, cpus, price)
         if output_response.present?
           # sorting by total cost
-          output_response = output_response.sort_by{ |hash| hash['total_cost'] }.reverse
+          output_response = output_response.sort_by{ |hash| hash[:'total_cost'] }
           print "\n For the minimum of " ,cpus, " cpus and maximum cost of ", price, " total cost, the optimized servers are:\n"
           puts "\n--------------------------------------------------"
           puts JSON.pretty_generate(output_response)
@@ -70,23 +70,25 @@ module ResourceAllocator
         output_response = MinimumCpu.get_cpu_hours_cost($server_value, $region, hours, cpus)
         if output_response.present?
           # sorting by total cost
-          output_response = output_response.sort_by{ |hash| hash['total_cost'] }.reverse
+          output_response = output_response.sort_by{ |hash| hash[:'total_cost'] }
           print "\n For the minimum of " ,cpus, " cpus and ", hours, "hours, the optimized servers are:\n"
           puts "\n--------------------------------------------------"
           puts JSON.pretty_generate(output_response)
           puts "\n--------------------------------------------------"
         else
-          print "\n Cannot provide output for the minimum of " ,cpus, " cpus and ", hours, " hours. Please provide lower cpus"
+          print "\n Cannot provide output for the minimum of " ,cpus, " cpus and ", hours, " hours. Please try with different cpu and hours"
         end
       elsif(price && !(cpus.zero? && cpus.nil?))
         output_response = MaximumPrice.get_price_hours_cost($region, hours, price)
         if output_response.present?
+          # sorting by total cost
+          output_response = output_response.sort_by{ |hash| hash[:'total_cost'] }
           print "\n For the price of $" ,price, " and ", hours, "hours, the optimized servers are:\n"
           puts "\n--------------------------------------------------"
           puts JSON.pretty_generate(output_response)
           puts "\n--------------------------------------------------"
         else
-          print "\n Cannot provide output for the Maximum of " ,price, " price and ", hours, " hours. Please provide higher cost"
+          print "\n Cannot provide output for the Maximum of " ,price, " price and ", hours, " hours. Please try with different price and hours"
         end
       end
     end
