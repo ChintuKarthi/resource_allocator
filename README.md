@@ -10,7 +10,7 @@ This Gem assumes that ruby is already installed in the system.
 
 ## Local development
 
-To install the Gem, first bclone it locally by using the git clone command
+To install the Gem, first clone it locally by using the git clone command
 ```
 git clone https://github.com/ChintuKarthi/resource_allocator/
 ```
