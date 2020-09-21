@@ -17,6 +17,8 @@ module MinCpuMaxPrice
         current_total_cost[0] = ''
         # If the cost is less than or equal to price add it to the output response
         if(current_total_cost.to_f <= price)
+          # Adding back the dollar symbol
+          current_region[:total_cost] = "$" + current_region[:total_cost]
           min_cpu_max_price_output = min_cpu_max_price_output.append(current_region)
         end
       end
