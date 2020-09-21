@@ -29,13 +29,9 @@ module MinimumCpu
     west_server = OptimizeCPU.optimize_servers(west_keys, cpus, $server_value, call_flag)
     asia_server = OptimizeCPU.optimize_servers(asia_keys, cpus, $server_value, call_flag)
 
-
-
     east_cost = OptimizeCPU.get_region_cost(east_server, $region[:'us-east'].stringify_keys, hours)
     west_cost = OptimizeCPU.get_region_cost(west_server, $region[:'us-west'].stringify_keys, hours)
     asia_cost = OptimizeCPU.get_region_cost(asia_server, $region[:'asia'].stringify_keys, hours)
-
-    total_cost = east_cost + west_cost + asia_cost
 
     east_hash = {}
     west_hash = {}
@@ -54,15 +50,14 @@ module MinimumCpu
         "servers": west_server
       }
     end
-    if asia_hash.present?
+    if asia_cost.present?
       asia_hash = {
         "region": "asia",
         "total_cost": "$" + asia_cost.round(2).to_s,
         "servers": asia_server
       }
     end
-
-    minimum_cpu_output = [ west_hash, east_hash, asia_hash]
+    minimum_cpu_output = [east_hash, west_hash, asia_hash]
     minimum_cpu_output = minimum_cpu_output.delete_if &:empty?
     minimum_cpu_output
   end
